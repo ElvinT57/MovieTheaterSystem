@@ -1,5 +1,13 @@
-/*
- * 
+**
+ * Purpose: Data Structure and Algorithms Project
+ * Status: Complete and thoroughly tested
+ * Last update: 
+ * Submitted:  04/30/19
+ * Comment: test suite and sample run attached
+ *
+ * @author: Christina Bannon, Elvin Torres 
+ * @version: 
+ *
  * The Theater class simulates a 
  * movie theater's seating chart. 
  */
@@ -19,8 +27,7 @@ public class Theater
 		this.movieName = movieName;
 		this.rows = rows;
 		this.cols = cols;
-		currentRow = 0;
-		currentCol = 0;
+		currentRow = currentCol = 0;
 		
 		numVacantSeats = this.rows * this.cols;
 		
