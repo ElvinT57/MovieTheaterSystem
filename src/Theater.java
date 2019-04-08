@@ -5,10 +5,13 @@
  */
 public class Theater 
 {
-	private String movieName;
-	private int rows;
-	private int cols;
-	private int numVacantSeats;
+	private String  movieName;
+	private int     rows;
+	private int     cols;
+	private int     currentRow;
+	private int     currentCol;
+	private int     numVacantSeats;
+	
 	private String [] [] seatChart;
 	
 	public Theater (int rows, int cols, String movieName)
@@ -16,6 +19,8 @@ public class Theater
 		this.movieName = movieName;
 		this.rows = rows;
 		this.cols = cols;
+		currentRow = 0;
+		currentCol = 0;
 		
 		numVacantSeats = this.rows * this.cols;
 		
@@ -41,26 +46,58 @@ public class Theater
 	
 	public boolean assignSeats(Customer customer)
 	{
-		int unSeatedCustomers = customer.getSize();
+		int unSeatedCustomers = customer.getSizeOfParty();
+		boolean seatSpace = false;
 		
 		while (unSeatedCustomers > 0)
 		{
-			int rowIndex = 0;
-			int colIndex = 0;
-			while ( index < cols)
-			{
-				if (seatChart[rowIndex] [colIndex] == null)
-				{
-					
-				}
-			}
+			seatSpace = findSeat(customer);
+			unSeatedCustomers --;
 		}
-		
+		return seatSpace;
 	}
 	
+	private boolean findSeat(Customer customer)
+	{
+		boolean seatSpace = false;
+		int unSeatedCustomers = customer.getSizeOfParty();
+		
+		if (unSeatedCustomers <= numVacantSeats)
+		{
+			fillSeat(customer);
+			seatSpace = true;
+		}
+		else
+		{
+			seatSpace = false;
+		}
+		
+		return seatSpace;
+	}
 	
-	
-	
-
-	
+	private void fillSeat(Customer customer)
+	{	
+		//boolean seatSpace = false;
+		
+		for (int i = currentRow; i < rows; i++)
+		{
+			for (int j = currentCol; j < cols; i++)
+			{
+				if (seatChart[i][j] == null)
+				{
+					seatChart [i][j] = customer.getName();
+					
+					currentRow = i;
+					currentCol = j;
+					
+					numVacantSeats--;
+					
+					//seatSpace = true;
+					
+					i = rows;
+					j = cols;
+				}		
+			}
+		}	
+	}
 }
