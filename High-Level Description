@@ -1,0 +1,16 @@
+Thursday, April 10: beginning of class: Hand in high-level description of your project design.
+
+The high level description of your project design should include:
+
+    - what is the most frequent operation that is expected to be performed during the entire execution of the program and how your choices optimize that frequent operation.
+
+    - what ADT(s) you plan to use and why
+
+    - what instances of ADT(s) you plan to use and what you plan to use them for
+
+    - for each menu option, present the data flow and the instances affected (include what input is needed, what collections are affected and how)
+
+    - the classes you will be designing (name, description, functionality)
+
+    - if working in a group, which group member will work on each part of the project (the work has to be evenly distributed)
+    
