@@ -122,3 +122,12 @@ public class Theater
 		}
 	}
 }
+
+/**
+     * Removes the party of the given name.
+     * @param name Name of the party
+     * @return true or false whether the customer is in the theater and has been removed
+     */
+    public boolean removeCustomer(String name){
+
+    }
