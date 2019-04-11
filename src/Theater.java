@@ -152,15 +152,8 @@ public class Theater
 	}
 
 
-	public boolean isEmpty()
-	{
-		boolean isEmpty = true;
-
-		if (numVacantSeats > 0)
-		{
-			isEmpty = false;
-		}
-		return isEmpty;
-	}
+	public boolean isEmpty(){
+        return (numVacantSeats == (seatChart.length * seatChart[0].length));
+    }
 }
 
