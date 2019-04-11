@@ -39,6 +39,8 @@ public class Theater
 		}
 	}
 	
+	//CB this method just keeps growing the more that I think about it. 
+	//CB might break it into a control method and some private helpers tomorrow. 
 	public boolean assignSeats(Customer customer)
 	{
 		//CB will throw a big ol exception yalllllll
@@ -51,22 +53,39 @@ public class Theater
 			if (currentRow % 2 == 0) {
 				
 				currentCol = (++currentCol) % seatChart[0].length;
-				seatChart[currentRow] [currentCol] = customer.getName();
+				//There should be acheck as to if its null, maybe ere
+				if (seatChart[currentRow][currentCol] == null)
+				{
+					seatChart[currentRow] [currentCol] = customer.getName();
 				
-				if (currentCol == ( seatChart[0].length - 1)) {
-					currentRow++;
+					if (currentCol == ( seatChart[0].length - 1)) {
+						currentRow = (++currentRow) % seatChart.length;
+					}
+				}
+				else
+				{
+					//CB throw a seats taken exception????
 				}
 				
 			} else {
 				
 				currentCol = (--currentCol) % seatChart[0].length;
-				seatChart[currentRow] [currentCol] = customer.getName();
 				
-				if (currentCol == 0) {
-					currentRow++;
+				if(seatChart[currentRow][currentCol] == null)
+				{
+					seatChart[currentRow] [currentCol] = customer.getName();
+				
+					if (currentCol == 0) {
+						currentRow = (++currentRow) % seatChart.length;
+					}
+				}
+				else
+				{
+					//an exception could be good here too! just a free throw 
 				}
 			}
 			unseated --;
+			numVacantSeats--;
 		}
 		return true;
 	}
@@ -76,13 +95,18 @@ public class Theater
      * @return true or false whether the customer is in the theater and has been removed
      */
 
+	/*
+	 * note to self: obvious removes, but also will need ot update current col /row
+	 * in a meaningful way
     public boolean removeCustomer(String name)
     {
+    	//nested loops to remove a customer
     	for (int row = 0; row < ; row++)
     	{
     		for 
     	}
     }
+    */
 
    public boolean isEmpty()
    {
