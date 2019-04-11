@@ -85,7 +85,7 @@ public class Driver {
                     option2(input, lines, movies, currLine);
                     break;
                 case "3":
-                    option3(input,movies);
+                    option3(input, movies);
                     break;
                 case "4":
                     break;
@@ -130,7 +130,7 @@ public class Driver {
             //retrieve index from option
             currLine = (getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1));
         }
-        //Inquiry next customer using the currLine index
+        //Inquiry next customer using the lastLine index
         Customer customer = (Customer) lines[(currLine % 3)].dequeue();   //use modulo for round robin
         //increment currline
         currLine++;
@@ -143,17 +143,40 @@ public class Driver {
         }
     }
 
-    private static void option3(StringBuilder input, Theater[] movies) throws IOException{
+    private static void option3(StringBuilder input, Theater[] movies) throws IOException {
         System.out.print(">>Enter customer name to leave Movie Theater: ");
         String name = getInput(input);
         if (movies[0].isEmpty() && movies[1].isEmpty())
             System.out.println("No customers are in the movie theater at this time.");
         else {
-            if(movies[0].removeCustomer(name) || movies[1].removeCustomer(name)){
+            if (movies[0].removeCustomer(name) || movies[1].removeCustomer(name)) {
                 System.out.println("Customer " + name + " has left the Movie Theater.");
-            }else
+            } else
                 System.out.println("This customer is not in Movie Theater.");
         }
+    }
+
+    public static void option4(QueueRA[] lines) throws IOException {
+        //display first line
+        if (lines[0].numItems > 1)
+            System.out.println("\t\tThe following customers are in the first line: ");
+        else
+            System.out.println("\t\tThe following customer is in the first line: ");
+        displayLineInfo(lines[0]);
+
+        //display second line
+        if (lines[1].numItems > 1)
+            System.out.println("\t\tThe following customers are in the second line: ");
+        else
+            System.out.println("\t\tThe following customer is in the second line: ");
+        displayLineInfo(lines[1]);
+
+        //display third line
+        if (lines[2].numItems > 1)
+            System.out.println("\t\tThe following customers are in the third line: ");
+        else
+            System.out.println("\t\tThe following customer is in the third line: ");
+        displayLineInfo(lines[2]);
     }
 
     //============== HELPER METHODS ==============
@@ -171,6 +194,17 @@ public class Driver {
      * @param customer
      */
     private static void assignLine(Customer customer) {
-        //CONTINUE
+        //Continue
+    }
+
+    /**
+     * Calls the toString method of the given line, and
+     * manipulates the string to display it properly.
+     * @param line
+     */
+    private static void displayLineInfo(QueueRA line){
+        String str = line.toString();
+        str.replaceAll(". ", ".\n");
+        System.out.println(str);
     }
 }
