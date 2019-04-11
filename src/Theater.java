@@ -3,6 +3,11 @@
  * movie theater's seating chart. 
  */
 
+/*
+ * The Theater class simulates a 
+ * movie theater's seating chart. 
+ */
+
 public class Theater 
 {
 	private String       movieName;  
@@ -31,107 +36,68 @@ public class Theater
 		return numVacantSeats;
 	}
 	
+	private void seatCapacity(Customer customer)
+	{
+		if (customer.getSizeOfParty() > numVacantSeats)
+		{
+			// Throw a big old exception!
+		}
+	}
+	
 	public boolean assignSeats(Customer customer)
 	{
-		int unSeatedCustomers = customer.getSizeOfParty();
-		boolean seatSpace = false;
+		//CB will throw a big ol exception yalllllll
+		seatCapacity(customer);
 		
-		while (unSeatedCustomers > 0)
-		{
-			seatSpace = findSeat(customer);
-			unSeatedCustomers --;
-		}
-		return seatSpace;
-	}
-	
-	private boolean findSeat(Customer customer)
-	{
-		boolean seatSpace = false;
-		int unSeatedCustomers = customer.getSizeOfParty();
+		int unseated = customer.getSizeOfParty();
 		
-		if (unSeatedCustomers <= numVacantSeats)
-		{
-			fillSeat(customer);
-			seatSpace = true;
+		while (unseated > 0) {
+			
+			if (currentRow % 2 == 0) {
+				
+				currentCol = (++currentCol) % seatChart[0].length;
+				seatChart[currentRow] [currentCol] = customer.getName();
+				
+				if (currentCol == ( seatChart[0].length - 1)) {
+					currentRow++;
+				}
+				
+			} else {
+				
+				currentCol = (--currentCol) % seatChart[0].length;
+				seatChart[currentRow] [currentCol] = customer.getName();
+				
+				if (currentCol == 0) {
+					currentRow++;
+				}
+			}
+			unseated --;
 		}
-		else
-		{
-			seatSpace = false;
-		}
-		
-		return seatSpace;
+		return true;
 	}
-	
-
-	// We want a "snake" fill
-	private void fillSeat(Customer customer)
-	{	
-		//boolean seatSpace = false;
-		
-		for (int i = currentRow; i < seatChart.length; i ++)
-		{
-			//CB even number rows gget filled "left to right"
-			if (i % 2 == 0){
-				fillLeftToRight(customer, i);
-			}
-			
-			//CB odd numbered rows get filled "right to left"
-			else {
-				fillRightToLeft(customer, i);
-			}
-		}	
-	}
-	
-	private void fillLeftToRight(Customer customer, int row)
-	{
-		for (int c = currentCol; c < seatChart[0].length; c++){
-			if (seatChart[row][c] == null){
-				seatChart [row][c] = customer.getName();
-			
-				currentRow = row;
-				currentCol = c;
-			
-				numVacantSeats--;
-			}
-			else
-			{
-				System.out.println("SEATS TAKEN @ (" 
-						+ row + " , " + c + ")" );
-				c = seatChart[0].length; 
-			}
-		}
-	}
-	
-	private void fillRightToLeft(Customer customer, int row)
-	{
-		for (int c = currentCol; c >= 0; c--){
-			if (seatChart[row][c] == null){
-				seatChart [row][c] = customer.getName();
-			
-				currentRow = row;
-				currentCol = c;
-			
-				numVacantSeats--;
-			}
-			else
-			{
-				System.out.println("SEATS TAKEN @ (" 
-						+ row + " , " + c + ")" );
-				c = seatChart[0].length; 
-			}
-		}
-	}
-}
-
 /**
      * Removes the party of the given name.
      * @param name Name of the party
      * @return true or false whether the customer is in the theater and has been removed
      */
-    public boolean removeCustomer(String name){
 
+    public boolean removeCustomer(String name)
+    {
+    	for (int row = 0; row < ; row++)
+    	{
+    		for 
+    	}
     }
 
-   public boolean isEmpty(){
-	   return (numVacantSeats == (seatChart.length * seatChart[0].length));
+   public boolean isEmpty()
+   {
+	   boolean isEmpty = true;
+	   
+	   if (numVacantSeats > 0)
+	   {
+		   isEmpty = false;
+	   }
+	   return isEmpty;
    }
+}
+
