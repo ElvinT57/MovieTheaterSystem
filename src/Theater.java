@@ -131,3 +131,7 @@ public class Theater
     public boolean removeCustomer(String name){
 
     }
+
+   public boolean isEmpty(){
+	   return (numVacantSeats == (seatChart.length * seatChart[0].length));
+   }
