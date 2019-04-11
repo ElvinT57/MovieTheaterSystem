@@ -3,11 +3,6 @@
  * movie theater's seating chart. 
  */
 
-/*
- * The Theater class simulates a 
- * movie theater's seating chart. 
- */
-
 public class Theater 
 {
 	private String       movieName;  
