@@ -130,7 +130,7 @@ public class Driver {
             //retrieve index from option
             currLine = (getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1));
         }
-        //Inquiry next customer using the lastLine index
+        //Inquiry next customer using the currLine index
         Customer customer = (Customer) lines[(currLine % 3)].dequeue();   //use modulo for round robin
         //increment currline
         currLine++;
