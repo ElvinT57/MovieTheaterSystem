@@ -145,7 +145,7 @@ public class Driver {
             //retrieve index from option
             lines.setCurrentDQ((getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1)));
         }
-        //Inquiry next customer using the lastLine index
+        //Inquiry next customer (in Round Robin matter)
         Customer customer = (Customer) lines.dequeue();
 
         //assign seats
@@ -192,7 +192,7 @@ public class Driver {
         } else
             System.out.println("\t\tNo customers in the second line");
 
-        //display third line
+        //display express line
         if (lines.getSizeOf(0) != 0) {
             if (lines.getSizeOf(0) > 1)
                 System.out.println("\t\tThe following customers are in the express line: ");
