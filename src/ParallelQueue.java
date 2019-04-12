@@ -1,4 +1,4 @@
-public class ParallelQueue<T> implements ParallelQueueInterface<T> {
+public class ParallelQueue<T> implements QueueInterface<T> {
     //Data structure for this ADT
     private QueueRA<T>[] queues;
     //Data fields
@@ -25,16 +25,22 @@ public class ParallelQueue<T> implements ParallelQueueInterface<T> {
         return isEmpty;
     }
 
+    public int size() {
+        return queues.length;
+    }
+
     @Override
     public void enqueue(T newItem) {
         //if the customer has priority
-        if (((Customer) newItem).isUnderAge())
+        if (((Customer) newItem).isUnderAge()) {
             prioritize(newItem);
-        else
+        } else {
+            System.out.println("lastEnqueue: " + lastEnqueue);
             //if the remainder is index 0 (Express) then pass
             if (lastEnqueue % queues.length == 0)
                 lastEnqueue++;
-        queues[(lastEnqueue++) % queues.length].enqueue(newItem);
+            queues[(lastEnqueue++) % queues.length].enqueue(newItem);
+        }
     }
 
     @Override
@@ -71,14 +77,38 @@ public class ParallelQueue<T> implements ParallelQueueInterface<T> {
         return current;
     }
 
+    /**
+     * Returns the size of the queue at the given
+     * index.
+     *
+     * @return int Size
+     */
+    public int getSizeOf(int i) {
+        return queues[i].numItems;
+    }
+
     private void prioritize(T newItem) {
         //check for the smallest line compared to the express line
         int smallest = 0;   //assume the express is the smallest
         for (int i = 1; i < queues.length; i++) {
-            if(queues[smallest].numItems < queues[i].numItems)
+            if (queues[smallest].numItems > queues[i].numItems) {
                 smallest = i;   //new smallest line found!
+            }
         }
         //enqueue to the smallest queue
         queues[smallest].enqueue(newItem);
+    }
+
+    /**
+     * Returns a references a queue in the
+     * parallelqueue at the given index
+     *
+     * @param i index
+     * @return
+     */
+    public QueueRA<T> getQueue(int i) {
+        if (i < 0 || i > queues.length - 1)
+            throw new QueueException("index is out of range!");
+        return queues[i];
     }
 }
