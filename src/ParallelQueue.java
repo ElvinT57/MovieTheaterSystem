@@ -2,8 +2,8 @@ public class ParallelQueue<T> implements QueueInterface<T> {
     //Data structure for this ADT
     private QueueRA<T>[] queues;
     //Data fields
-    private int current;
-    private int lastEnqueue;    //index of last enqueue
+    private int currDQ;        //index of next dequeue
+    private int currEQ;    //index of next enqueue
 
     public ParallelQueue(int n) {
         //initialize the queues
@@ -11,9 +11,9 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         for (int i = 0; i < n; i++)
             queues[i] = new QueueRA<>();
         //set current to -1 to indicate it is our first call
-        current = -1;
-        //set the last enqueue to 1 for the first line
-        lastEnqueue = 0;
+        currDQ = -1;
+        //set the current enqueue to 1 for the first line
+        currEQ = 0;
     }
 
     @Override
@@ -35,11 +35,11 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         if (((Customer) newItem).isUnderAge()) {
             prioritize(newItem);
         } else {
-            System.out.println("lastEnqueue: " + lastEnqueue);
+            System.out.println("lastEnqueue: " + currEQ);
             //if the remainder is index 0 (Express) then pass
-            if (lastEnqueue % queues.length == 0)
-                lastEnqueue++;
-            queues[(lastEnqueue++) % queues.length].enqueue(newItem);
+            if (currEQ % queues.length == 0)
+                currEQ++;
+            queues[(currEQ++) % queues.length].enqueue(newItem);
         }
     }
 
@@ -50,10 +50,10 @@ public class ParallelQueue<T> implements QueueInterface<T> {
 
         T object = null;
         while (object == null) {
-            if (!queues[current].isEmpty())
-                object = queues[((current) % queues.length)].dequeue();
+            if (!queues[currDQ].isEmpty())
+                object = queues[((currDQ++)% queues.length)].dequeue();
             else
-                current++;
+                currDQ++;
         }
         return object;
     }
@@ -70,13 +70,16 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         if (isEmpty())
             throw new QueueException("Queue is empty.");
         //retrieve the front of the current queue
-        return queues[current % queues.length].peek();
+        return queues[currDQ % queues.length].peek();
     }
 
-    public int getCurrent() {
-        return current;
+    public int getCurrentDQ() {
+        return currDQ;
     }
 
+    public void setCurrentDQ(int currDQ){
+        this.currDQ = currDQ;
+    }
     /**
      * Returns the size of the queue at the given
      * index.
