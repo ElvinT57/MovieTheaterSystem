@@ -121,12 +121,10 @@ public class Driver {
         System.out.print(">>Is a child 11 or younger in this party(Y/N)? ");
         underAge = (getInput(input).equalsIgnoreCase("Y")) ? true : false;
 //        //check if the name is in one of the theater
-//        if(!movies[0].hasName("") && movies[1].hasName("")){
-//
+//        if(!movies[0].hasName("") && !movies[1].hasName("")){
+//            lines.enqueue(new Customer(name, movieName, partySize, underAge));
 //        }else
 //            System.out.println("Is alread");
-
-        lines.enqueue(new Customer(name, movieName, partySize, underAge));
     }
 
     /**
