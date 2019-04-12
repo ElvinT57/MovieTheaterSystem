@@ -20,11 +20,16 @@ public class ParallelQueue<T> implements QueueInterface<T> {
     public boolean isEmpty() {
         boolean isEmpty = true; //assume it is empty
         for (int i = 0; i < queues.length; i++)
-            if (queues[i].numItems > 0)
+            //if one is not empty, then this parallel queue is not empty
+            if (!queues[i].isEmpty())
                 isEmpty = false;
         return isEmpty;
     }
 
+    /**
+     * Size of the parallel Queue, not the inner queue
+     * @return
+     */
     public int size() {
         return queues.length;
     }
@@ -35,8 +40,7 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         if (((Customer) newItem).isUnderAge()) {
             prioritize(newItem);
         } else {
-            System.out.println("lastEnqueue: " + currEQ);
-            //if the remainder is index 0 (Express) then pass
+            //if the remainder is index 0 (Express) then pass to next index
             if (currEQ % queues.length == 0)
                 currEQ++;
             queues[(currEQ++) % queues.length].enqueue(newItem);
@@ -45,15 +49,16 @@ public class ParallelQueue<T> implements QueueInterface<T> {
 
     @Override
     public T dequeue() throws QueueException {
-        if (isEmpty())
+        if (this.isEmpty())
             throw new QueueException("ParallelQueue is empty.");
-
+        //continue the dequeue if not empty
         T object = null;
         while (object == null) {
             if (!queues[currDQ].isEmpty())
+                //dequeue in round robin manner
                 object = queues[((currDQ++)% queues.length)].dequeue();
             else
-                currDQ++;
+                currDQ++;   //increment to the next non empty queue
         }
         return object;
     }
@@ -89,11 +94,11 @@ public class ParallelQueue<T> implements QueueInterface<T> {
     public int getSizeOf(int i) {
         return queues[i].numItems;
     }
-    
+
     /**
      * Enqueue the new item into the priority queue,
      * if that queue is the smallest compared to the others.
-     * 
+     *
      * @param newItem
      */
     private void prioritize(T newItem) {
@@ -109,8 +114,8 @@ public class ParallelQueue<T> implements QueueInterface<T> {
     }
 
     /**
-     * Returns a references of a queue in the
-     * parallel queue at the given index
+     * Returns a references a queue in the
+     * parallelqueue at the given index
      *
      * @param i index
      * @return
