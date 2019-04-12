@@ -89,7 +89,13 @@ public class ParallelQueue<T> implements QueueInterface<T> {
     public int getSizeOf(int i) {
         return queues[i].numItems;
     }
-
+    
+    /**
+     * Enqueue the new item into the priority queue,
+     * if that queue is the smallest compared to the others.
+     * 
+     * @param newItem
+     */
     private void prioritize(T newItem) {
         //check for the smallest line compared to the express line
         int smallest = 0;   //assume the express is the smallest
@@ -103,8 +109,8 @@ public class ParallelQueue<T> implements QueueInterface<T> {
     }
 
     /**
-     * Returns a references a queue in the
-     * parallelqueue at the given index
+     * Returns a references of a queue in the
+     * parallel queue at the given index
      *
      * @param i index
      * @return
