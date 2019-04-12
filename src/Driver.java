@@ -145,7 +145,7 @@ public class Driver {
             //retrieve index from option
             lines.setCurrentDQ((getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1)));
         }
-        //Inquiry next customer (in Round Robin matter)
+        //Inquiry next customer (in Round Robin manner)
         Customer customer = (Customer) lines.dequeue();
 
         //assign seats
