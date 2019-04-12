@@ -1,5 +1,3 @@
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,19 +18,13 @@ public class Driver {
     public static void main(String[] args) throws IOException {
         //Local variables for this program
         StringBuilder input = new StringBuilder("");
-        int numberTicketsSold, numRows, seatsInRow = 0;
+        int numRows, seatsInRow = 0;
         double PRICE_OF_TICKET;
         double totalEarning = 0;
         //List of queues [ Express, Reg1, Reg2 ]
-        QueueRA[] lines = new QueueRA[3];
-        //initialize each queue
-        lines[0] = new QueueRA<Customer>();
-        lines[1] = new QueueRA<Customer>();
-        lines[2] = new QueueRA<Customer>();
+        ParallelQueue<Customer> lines = new ParallelQueue<>(3);
         //two references of Theater for both movies
         Theater[] movies = new Theater[2];
-        //index of current line that will be called
-        int currLine = -1; //initialize with -1 to indicate it is our first call
 
         System.out.println("Welcome to the wonderful Movie Theater program!\n" +
                 "\tTonight's feature are:\n" +
@@ -79,28 +71,38 @@ public class Driver {
                     System.exit(0);
                     break;
                 case "1":
-                    option1(input, lines);
+                    option1(input, lines, movies);
                     break;
                 case "2":
-                    option2(input, lines, movies, currLine);
+                    option2(input, lines, movies, totalEarning, PRICE_OF_TICKET);
                     break;
                 case "3":
                     option3(input, movies);
                     break;
                 case "4":
+                    option4(lines);
                     break;
                 case "5":
+                    //display the seating chart for Shazam
+                    System.out.println("Here's the seating for the Shazam! Movie Theater:");
+                    System.out.println(movies[1]);
                     break;
                 case "6":
+                    //display the seating chart for Dumbo
+                    System.out.println("Here's the seating for the Dumbo Movie Theater:");
+                    System.out.println(movies[0]);
                     break;
                 case "7":
+                    System.out.println(" tickets have been sold for the Shazam! Movie.");
+                    System.out.println(" tickets have been sold for the Dumbo Movie.");
+                    System.out.println("Total Earning: " + totalEarning);
                     break;
             }
         }
     }
 
     //============== CASES ==============
-    private static void option1(StringBuilder input, QueueRA[] lines) throws IOException {
+    private static void option1(StringBuilder input, ParallelQueue lines, Theater[] movies) throws IOException {
         //Local variables
         String name, movieName;
         int partySize = 0;
@@ -118,22 +120,35 @@ public class Driver {
 
         System.out.print(">>Is a child 11 or younger in this party(Y/N)? ");
         underAge = (getInput(input).equalsIgnoreCase("Y")) ? true : false;
+//        //check if the name is in one of the theater
+//        if(!movies[0].hasName("") && movies[1].hasName("")){
+//
+//        }else
+//            System.out.println("Is alread");
 
-        //find the appropriate line for this customer
-        assignLine(new Customer(name, movieName, partySize, underAge));
+        lines.enqueue(new Customer(name, movieName, partySize, underAge));
     }
 
-    private static void option2(StringBuilder input, QueueRA[] lines, Theater[] movies, int currLine) throws IOException {
-        if (currLine == -1) {
+    /**
+     * Get the next customer from the lines and
+     * assign their seats if there are enough seats.
+     *
+     * @param input
+     * @param lines
+     * @param movies
+     * @param totalEarning
+     * @return total earning of the tickets purchase
+     * @throws IOException
+     */
+    private static double option2(StringBuilder input, ParallelQueue lines, Theater[] movies, double totalEarning, double PRICE_OF_TICKET) throws IOException {
+        if (lines.getCurrentDQ() == -1) {
             //decide what line to serve first
             System.out.print("Which line would like to serve customers first? (Express/Reg1/Reg2): ");
             //retrieve index from option
-            currLine = (getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1));
+            lines.setCurrentDQ((getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1)));
         }
         //Inquiry next customer using the lastLine index
-        Customer customer = (Customer) lines[(currLine % 3)].dequeue();   //use modulo for round robin
-        //increment currline
-        currLine++;
+        Customer customer = (Customer) lines.dequeue();
 
         //assign seats
         if (customer.getMovieName().equals("Dumbo")) {
@@ -141,6 +156,8 @@ public class Driver {
         } else {
             //CONTINUE
         }
+
+        return totalEarning;
     }
 
     private static void option3(StringBuilder input, Theater[] movies) throws IOException {
@@ -156,27 +173,36 @@ public class Driver {
         }
     }
 
-    public static void option4(QueueRA[] lines) throws IOException {
+    public static void option4(ParallelQueue lines) {
         //display first line
-        if (lines[0].numItems > 1)
-            System.out.println("\t\tThe following customers are in the first line: ");
-        else
-            System.out.println("\t\tThe following customer is in the first line: ");
-        displayLineInfo(lines[0]);
+        if (lines.getSizeOf(1) != 0) {
+            if (lines.getSizeOf(1) > 1)
+                System.out.println("\t\tThe following customers are in the first line: ");
+            else
+                System.out.println("\t\tThe following customer is in the first line: ");
+            displayLineInfo(lines.getQueue(1));
+        } else
+            System.out.println("\t\tNo customers in the first line");
 
         //display second line
-        if (lines[1].numItems > 1)
-            System.out.println("\t\tThe following customers are in the second line: ");
-        else
-            System.out.println("\t\tThe following customer is in the second line: ");
-        displayLineInfo(lines[1]);
+        if (lines.getSizeOf(2) != 0) {
+            if (lines.getSizeOf(2) > 1)
+                System.out.println("\t\tThe following customers are in the second line: ");
+            else
+                System.out.println("\t\tThe following customer is in the second line: ");
+            displayLineInfo(lines.getQueue(2));
+        } else
+            System.out.println("\t\tNo customers in the second line");
 
         //display third line
-        if (lines[2].numItems > 1)
-            System.out.println("\t\tThe following customers are in the third line: ");
-        else
-            System.out.println("\t\tThe following customer is in the third line: ");
-        displayLineInfo(lines[2]);
+        if (lines.getSizeOf(0) != 0) {
+            if (lines.getSizeOf(0) > 1)
+                System.out.println("\t\tThe following customers are in the express line: ");
+            else
+                System.out.println("\t\tThe following customer is in the express line: ");
+            displayLineInfo(lines.getQueue(0));
+        } else
+            System.out.println("\t\tNo customers in the express line");
     }
 
     //============== HELPER METHODS ==============
@@ -187,24 +213,14 @@ public class Driver {
     }
 
     /**
-     * Assign the appropriate line for the given customer.
-     * No need to return a reference since we are doing
-     * in place changes to the queues.
-     *
-     * @param customer
-     */
-    private static void assignLine(Customer customer) {
-        //Continue
-    }
-
-    /**
      * Calls the toString method of the given line, and
      * manipulates the string to display it properly.
+     *
      * @param line
      */
-    private static void displayLineInfo(QueueRA line){
+    private static void displayLineInfo(QueueRA line) {
         String str = line.toString();
-        str.replaceAll(". ", ".\n");
-        System.out.println(str);
+        System.out.println(str.replace(". ", ".\n"));
     }
+
 }
