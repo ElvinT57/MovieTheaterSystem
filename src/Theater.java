@@ -1,6 +1,9 @@
 /*
  * The Theater class simulates a 
  * movie theater's seating chart. 
+ * 
+ * 
+ * Seating chart is functioning, can add
  */
 
 public class Theater 
@@ -31,80 +34,122 @@ public class Theater
 		return numVacantSeats;
 	}
 
-	private void seatCapacity(Customer customer)
+	private boolean seatCapacity(int sizeOfParty)
 	{
-		if (customer.getSizeOfParty() > numVacantSeats)
+		boolean vacancy = true;
+		if ( sizeOfParty > numVacantSeats)
 		{
-			// Throw a big old exception!
+			vacancy = false;
 		}
+		return vacancy;
 	}
 
-	//CB this method just keeps growing the more that I think about it. 
-	//CB might break it into a control method and some private helpers tomorrow. 
+	//CB working - tried to break it and couldnt. 
 	public boolean assignSeats(Customer customer)
 	{
-		//CB will throw a big ol exception yalllllll
-		seatCapacity(customer);
-
 		int unseated = customer.getSizeOfParty();
-
-		while (unseated > 0) {
+		
+		//CB first test for if the customer can be sat or not!
+		boolean successfulSeating = seatCapacity(unseated);
+		
+		while(successfulSeating & (unseated > 0)) {
 
 			if (currentRow % 2 == 0) {
 
-				fillRightToLeft(customer);
+				successfulSeating = fillRightToLeft(customer);
 
 			} else {
 
-				fillLeftToRight(customer);
+				successfulSeating = fillLeftToRight(customer);
 			}
-			unseated --;
-			numVacantSeats--;
+			
+			if (successfulSeating)
+			{
+				unseated --;
+				numVacantSeats--;
+			}
 		}
-		return true;
+		return successfulSeating;
 	}
 
-	private void fillRightToLeft(Customer customer)
+	/*
+	 * 
+	 * fills a row from right to left (surprise)
+	 * returns a boolean to represent if 
+	 * the seats were successfully filled
+	 * adjacently, or if something went wrong. 
+	 * 
+	 *
+	 */
+	private boolean fillRightToLeft(Customer customer)
 	{
-		currentCol = (++currentCol) % seatChart[0].length;
+		boolean seatingFulfilled = false;
+		
+		//CB if the seats can't be adjacent, the 
+		// arrangement is not fulfilled!
+		if (currentRow == seatChart.length){
+			updateCurrents();					
+		}
+		
 		//There should be acheck as to if its null, maybe ere
-		if (seatChart[currentRow][currentCol] == null)
-		{
+		if (seatChart[currentRow][currentCol] == null){
 			seatChart[currentRow] [currentCol] = customer.getName();
+			
+			seatingFulfilled = true;
 
-			if (currentCol == ( seatChart[0].length - 1)) {
-				currentRow = (++currentRow) % seatChart.length;
+			currentCol++;
+			
+			if (currentCol == seatChart[0].length ) {
+				
+				currentCol--;
+				currentRow++;
 			}
 		}
-		else
-		{
-			//CB throw a seats taken exception????
-		}
+	
+		if (!seatingFulfilled){
+			removeCustomer(customer.getName());
+		}	
+		return seatingFulfilled;
 	}
 
-	private void fillLeftToRight(Customer customer)
+	private boolean fillLeftToRight(Customer customer)
 	{
-		currentCol = (--currentCol) % seatChart[0].length;
+		boolean seatingFulfilled = false;
+		
+		if (currentRow == seatChart.length){
+			updateCurrents();					
+		}
+		
+		if(seatChart[currentRow][currentCol] == null){
+			seatChart[currentRow] [currentCol] = customer.getName();		
+			seatingFulfilled = true;
 
-		if(seatChart[currentRow][currentCol] == null)
-		{
-			seatChart[currentRow] [currentCol] = customer.getName();
-
-			if (currentCol == 0) {
+			currentCol--;
+			
+			if (currentCol < 0) {
+				
+				currentCol++;
 				currentRow = (++currentRow) % seatChart.length;
 			}
+			
+			
 		}
-		else
-		{
-			//an exception could be good here too! just a free throw 
+		
+		if (!seatingFulfilled) {
+			removeCustomer(customer.getName());
 		}
+		
+		return seatingFulfilled;
 	}
+	
+	
 	/**
 	 * Removes the party of the given name.
 	 * @param name Name of the party
 	 * @return true or false whether the customer is in the theater and has been removed
+	 *
+	 * UNTESTED
 	 */
-
 	public boolean removeCustomer(String name)
 	{
 		boolean customerPresent = false;
@@ -131,7 +176,7 @@ public class Theater
 	 * Helper method for removeCustomers... Still thinking on 
 	 * whether we may be better off removing the 'currents'
 	 * and just always finding the next possible spot. 
-	 * I'll do some quick math and update later. 
+	 * I'll do some quick math and update later? 
 	 */
 	private void updateCurrents()
 	{
@@ -152,8 +197,38 @@ public class Theater
 	}
 
 
-	public boolean isEmpty(){
-        return (numVacantSeats == (seatChart.length * seatChart[0].length));
-    }
-}
+	public boolean isEmpty()
+	{
+		boolean isEmpty = true;
 
+		if (numVacantSeats > 0)
+		{
+			isEmpty = false;
+		}
+		return isEmpty;
+	}
+	
+	
+	
+	//In matrix format, just to better see what's happening
+	public String showSeating()
+	{
+		StringBuilder string = new StringBuilder();
+		
+		for (int row = 0; row < seatChart.length; row++)
+		{
+			for (int col = 0; col < seatChart[0].length; col++)
+			{
+				if (seatChart[row][col] != null){
+					string.append( seatChart[row][col] + "    ");
+				}else {
+					string.append("(" + row + ","+ col + ")");
+				}
+			}
+			
+			string.append("\n");
+		}
+		
+		return string.toString();
+	}
+}
