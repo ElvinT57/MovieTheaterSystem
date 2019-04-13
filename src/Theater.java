@@ -13,12 +13,14 @@ public class Theater
 	private int         currentCol;     // r/c we left off at
 	private int     numVacantSeats;
 	private String [] [] seatChart;
+	private int 	   ticketsSold;
 
 	public Theater (int rows, int cols, String movieName)
 	{
 		this.movieName = movieName;
 		currentRow = 0;
 		currentCol = 0;
+		ticketsSold = 0;
 
 		numVacantSeats = rows * cols;
 
@@ -34,17 +36,25 @@ public class Theater
 		return numVacantSeats;
 	}
 
-	private boolean seatCapacity(int sizeOfParty)
+	public int getTicketsSold()
 	{
-		boolean vacancy = true;
-		if ( sizeOfParty > numVacantSeats)
-		{
-			vacancy = false;
-		}
-		return vacancy;
+		return ticketsSold;
 	}
-
-	//CB working - tried to break it and couldnt. 
+	
+	/*
+	 * 
+	 * with the help of 
+	 *     seatCapacity(int)
+	 *     fillRightToLeft(Customer)
+	 *     fillLeftToRight(Customer)
+	 *     upDateCurrents()
+	 * this method fills sneaks in a snake 
+	 * pattern so that every seat in the theater 
+	 * is filled with customers sitting adjacently 
+	 * to their parties. 
+	 * 
+	 * returns true if this is done successfully
+	 */
 	public boolean assignSeats(Customer customer)
 	{
 		int unseated = customer.getSizeOfParty();
@@ -67,9 +77,23 @@ public class Theater
 			{
 				unseated --;
 				numVacantSeats--;
+				ticketsSold++;
 			}
 		}
 		return successfulSeating;
+	}
+	
+	/*
+	 * simple checker to shorten up the assign seats method
+	 */
+	private boolean seatCapacity(int sizeOfParty)
+	{
+		boolean vacancy = true;
+		if ( sizeOfParty > numVacantSeats)
+		{
+			vacancy = false;
+		}
+		return vacancy;
 	}
 
 	/*
@@ -78,8 +102,6 @@ public class Theater
 	 * returns a boolean to represent if 
 	 * the seats were successfully filled
 	 * adjacently, or if something went wrong. 
-	 * 
-	 *
 	 */
 	private boolean fillRightToLeft(Customer customer)
 	{
@@ -130,9 +152,7 @@ public class Theater
 				
 				currentCol++;
 				currentRow = (++currentRow) % seatChart.length;
-			}
-			
-			
+			}					
 		}
 		
 		if (!seatingFulfilled) {
@@ -141,15 +161,24 @@ public class Theater
 		
 		return seatingFulfilled;
 	}
-	
-	
 	/**
 	 * Removes the party of the given name.
 	 * @param name Name of the party
 	 * @return true or false whether the customer is in the theater and has been removed
-	 *
-	 * UNTESTED
 	 */
+	
+	/*
+	 * 
+	 * remove is functioning with issues:
+	 * - after removing a bulk of customers, add 
+	 * sometimes returns false depending on where the available
+	 * seats are. I'm thinking I might have to do some refactoring, 
+	 * and maybe use a loop w an increment to keep track of
+	 * if in the entire 2d array there exists x number of seats in a row. 
+	 * It will make for more comparisons, but it will be more correct. 
+	 * 
+	 */
+
 	public boolean removeCustomer(String name)
 	{
 		boolean customerPresent = false;
@@ -163,6 +192,7 @@ public class Theater
 				{
 					seatChart[row][col] = null;
 					customerPresent = true;
+					numVacantSeats++;
 				}
 			}
 		}
@@ -176,7 +206,7 @@ public class Theater
 	 * Helper method for removeCustomers... Still thinking on 
 	 * whether we may be better off removing the 'currents'
 	 * and just always finding the next possible spot. 
-	 * I'll do some quick math and update later? 
+	 * I'll do some quick math and update later. 
 	 */
 	private void updateCurrents()
 	{
@@ -184,7 +214,7 @@ public class Theater
 		{
 			for (int col = 0; col < seatChart[0].length; col++)
 			{
-				if (seatChart[row][col] != null)
+				if (seatChart[row][col] == null)
 				{
 					currentRow = row;
 					currentCol = col; 
@@ -209,8 +239,6 @@ public class Theater
 	}
 	
 	
-	
-	//In matrix format, just to better see what's happening
 	public String showSeating()
 	{
 		StringBuilder string = new StringBuilder();
