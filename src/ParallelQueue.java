@@ -1,3 +1,13 @@
+/**
+ * Purpose: Data Structure and Algorithms Project
+ * Status: Complete and thoroughly tested
+ * Last update: 
+ * Submitted:  04/30/19
+ * Comment: test suite and sample run attached
+ *
+ * @author: Elvin Torres 
+ * @version: 
+ */
 public class ParallelQueue<T> implements QueueInterface<T> {
     //Data structure for this ADT
     private QueueRA<T>[] queues;
