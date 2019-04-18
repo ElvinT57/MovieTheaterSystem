@@ -1,12 +1,29 @@
 /**
  * Purpose: Data Structure and Algorithms Project
  * Status: Complete and thoroughly tested
- * Last update: 
+ * Last update:
  * Submitted:  04/30/19
  * Comment: test suite and sample run attached
  *
- * @author: Elvin Torres 
- * @version: 
+ * @author: Christina Bannon, Elvin Torres
+ * @version:
+ *
+ * <h1>Round Robin Matter Parallel Queue</h1>
+ * Representing a list of lines, using an array of Queues.
+ * Items will be enqueued and dequeued in a round robin
+ * matter.
+ *
+ * The first queue in the array will be used for the express
+ * line.
+ *
+ *  {
+ *      {   EXPRESS LINE QUEUE  },
+ *      {   REG 1               },
+ *      {   REG 2               },
+ *      ...
+ *      {   REG n-1             }
+ *  }
+ *
  */
 public class ParallelQueue<T> implements QueueInterface<T> {
     //Data structure for this ADT
@@ -106,8 +123,8 @@ public class ParallelQueue<T> implements QueueInterface<T> {
     }
 
     /**
-     * Enqueue the new item into the priority queue,
-     * if that queue is the smallest compared to the others.
+     * Enqueue the new item into the priority queue. If
+     * a smaller queue is found, enqueue to that queue.
      *
      * @param newItem
      */
