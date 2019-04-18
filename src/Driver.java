@@ -20,7 +20,6 @@ public class Driver {
         StringBuilder input = new StringBuilder("");
         int numRows, seatsInRow = 0;
         double PRICE_OF_TICKET;
-        double totalEarning = 0;
         //List of queues [ Express, Reg1, Reg2 ]
         ParallelQueue<Customer> lines = new ParallelQueue<>(3);
         //two references of Theater for both movies
@@ -67,14 +66,15 @@ public class Driver {
             System.out.print(">>You know the options. Make your menu selection now: ");
             switch (getInput(input)) {
                 case "0":
-                    System.out.printf("The Wonderful Movie Theater who earned %.02f kicks out remaining customers and closes...\nGood Bye!", totalEarning);
+                    System.out.printf("The Wonderful Movie Theater who earned %.02f kicks out remaining customers and closes...\nGood Bye!",
+                            (movies[0].getTicketsSold() + movies[1].getTicketsSold()) * PRICE_OF_TICKET);
                     System.exit(0);
                     break;
                 case "1":
                     option1(input, lines, movies);
                     break;
                 case "2":
-                    option2(input, lines, movies, totalEarning, PRICE_OF_TICKET);
+                    option2(input, lines, movies);
                     break;
                 case "3":
                     option3(input, movies);
@@ -95,13 +95,25 @@ public class Driver {
                 case "7":
                     System.out.println(" tickets have been sold for the Shazam! Movie.");
                     System.out.println(" tickets have been sold for the Dumbo Movie.");
-                    System.out.println("Total Earning: " + totalEarning);
+                    System.out.println("Total Earning: " + ((movies[0].getTicketsSold() + movies[1].getTicketsSold()) * PRICE_OF_TICKET));
                     break;
             }
         }
     }
 
     //============== CASES ==============
+
+    /**
+     * Prompts for customer information (Name, partySize, movieName, underAge).
+     * After, it checks if the customer is in the either movie theater.
+     * If the customer was not found, then they will added to the appropriate
+     * line.
+     *
+     * @param input input string builder
+     * @param lines ParallelQueue that represents lines
+     * @param movies array of movies
+     * @throws IOException
+     */
     private static void option1(StringBuilder input, ParallelQueue lines, Theater[] movies) throws IOException {
         //Local variables
         String name, movieName;
@@ -122,30 +134,31 @@ public class Driver {
         underAge = (getInput(input).equalsIgnoreCase("Y")) ? true : false;
 //        //check if the name is in one of the theater
 //        if(!movies[0].hasName("") && !movies[1].hasName("")){
-//            lines.enqueue(new Customer(name, movieName, partySize, underAge));
+//
 //        }else
 //            System.out.println("Is alread");
+
+        lines.enqueue(new Customer(name, movieName, partySize, underAge));
     }
 
     /**
-     * Get the next customer from the lines and
+     * Retrieve the next customer from the lines and
      * assign their seats if there are enough seats.
      *
-     * @param input
-     * @param lines
-     * @param movies
-     * @param totalEarning
-     * @return total earning of the tickets purchase
+     * @param input input string builder
+     * @param lines ParallelQueue that represents lines
+     * @param movies array of movies
+     *
      * @throws IOException
      */
-    private static double option2(StringBuilder input, ParallelQueue lines, Theater[] movies, double totalEarning, double PRICE_OF_TICKET) throws IOException {
+    private static void option2(StringBuilder input, ParallelQueue lines, Theater[] movies) throws IOException {
         if (lines.getCurrentDQ() == -1) {
             //decide what line to serve first
             System.out.print("Which line would like to serve customers first? (Express/Reg1/Reg2): ");
             //retrieve index from option
             lines.setCurrentDQ((getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1)));
         }
-        //Inquiry next customer (in Round Robin manner)
+        //Inquiry next customer using the lastLine index
         Customer customer = (Customer) lines.dequeue();
 
         //assign seats
@@ -154,10 +167,18 @@ public class Driver {
         } else {
             //CONTINUE
         }
-
-        return totalEarning;
     }
 
+    /**
+     * Prompts for a customer to leave Movie Theater.
+     *
+     * If the customer is found in either movie theaters,
+     * they will be removed from the seating chart.
+     *
+     * @param input input string builder
+     * @param movies array of movies
+     * @throws IOException
+     */
     private static void option3(StringBuilder input, Theater[] movies) throws IOException {
         System.out.print(">>Enter customer name to leave Movie Theater: ");
         String name = getInput(input);
@@ -171,6 +192,11 @@ public class Driver {
         }
     }
 
+    /**
+     * Displays the customers in each line.
+     *
+     * @param lines ParallelQueue that represents lines
+     */
     public static void option4(ParallelQueue lines) {
         //display first line
         if (lines.getSizeOf(1) != 0) {
@@ -192,7 +218,7 @@ public class Driver {
         } else
             System.out.println("\t\tNo customers in the second line");
 
-        //display express line
+        //display third line
         if (lines.getSizeOf(0) != 0) {
             if (lines.getSizeOf(0) > 1)
                 System.out.println("\t\tThe following customers are in the express line: ");
