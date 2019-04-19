@@ -196,14 +196,15 @@ public class Theater
     }
 
 	/**
-	 * showSeating creates a String that 
+	 * toString creates a String that 
 	 * represents the setChart array in 
 	 * a 'snake' formation, to represent the 
 	 * theater, & returns that String. 
 	 * 
 	 * @return String
 	 */
-	public String showSeating()
+	@Override
+	public String toString()
 	{
 		StringBuilder string = new StringBuilder();
 		
