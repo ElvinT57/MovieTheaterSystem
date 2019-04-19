@@ -1,3 +1,4 @@
+
 /**
  * Purpose: Data Structure and Algorithms Project
  * Status: Complete and thoroughly tested
@@ -9,31 +10,43 @@
  * @version: 4.19.2019
  */
 
-
 /**
  * 
- * <h1> Theater Class </h1>
+ * <h1> Theater </h1>
  * 
- * - Simulates a single theater playing a single show. 
- * - Holds and returns data regarding: 
- *   1) Seating - whether a party can be 
- *      accomodated or not, and where they will
- *      sit. 
+ * - Simulates a single theater 
+ *   playing a single show. 
+ * - Holds manipulates & returns 
+ *   data regarding: 
+ *   1) Seating - whether a party 
+ *      can be seated or not, and 
+ *      where they will sit. 
  *   2) Name of movie being played. 
  *   3) Tickets sold for the show
- *   4) Whether 
+ *   4) Whether a customer of the 
+ *      same name is already seated 
+ *      in the Theater or not
  */
-
 
 public class Theater 
 {
+
 	private String []    seatChart;
 	private String       movieName;  
 	private int     numVacantSeats;
 	private int 	   ticketsSold;
 	private int               cols;
 
-	public Theater (int rows, int cols, String movieName)
+	/**
+	 * Theater constructor initializes 
+	 * private variables to the user input.
+	 * 
+	 * @param rows 
+	 * @param cols
+	 * @param movieName
+	 */
+	public Theater (int rows, int cols, 
+			        String movieName)
 	{
 		seatChart = new String [rows * cols];
 		this.movieName = movieName;
@@ -42,16 +55,38 @@ public class Theater
 		ticketsSold = 0;
 	}
 
+	/**
+	 * getMovieName returns the user 
+	 * input name of the movie
+	 * 
+	 * @return String
+	 */
 	public String getMovieName() 
 	{
 		return movieName;
 	}
 	
+	/**
+	 * getTicketsSold returns the
+	 * accumulator of tickets sold for 
+	 * a particular movie
+	 * 
+	 * @return int
+	 */
 	public int getTicketsSold()
 	{
 		return ticketsSold;
 	}
 	
+	/**
+	 * accepts a String name, 
+	 * checks the seatChart array
+	 * for the name, and returns a
+	 * boolean indicating whether the 
+	 * name is present in the theater
+	 * @param name
+	 * @return
+	 */
 	public boolean hasName(String name)
 	{
 		boolean presence = false;
@@ -66,6 +101,17 @@ public class Theater
 		return presence;
 	}
 	
+	/**
+	 * assignSeats accepts a customer, 
+	 * and if there are seats available for 
+	 * the individuals in the customer's 
+	 * party, 'seats' the customers by 
+	 * passing the customer object to the 
+	 * seatingHelper
+	 * 
+	 * @return boolean - success or failure 
+	 *    of the seating attempt
+	 */
 	public boolean assignSeats(Customer customer)
 	{
 		boolean successfulSeating;
@@ -76,9 +122,9 @@ public class Theater
 			
 			successfulSeating = true;
 			ticketsSold += customer.getSizeOfParty();
-			numVacantSeats -= customer.getSizeOfParty();
-		}
-		else
+			numVacantSeats -=customer.getSizeOfParty();
+		} 
+		else 
 		{
 			successfulSeating = false;
 		}
@@ -86,6 +132,14 @@ public class Theater
 		return successfulSeating;	
 	}
 	
+	/**
+	 * seatingHelper accepts a customer, 
+	 * and copies their name into available
+	 * seat elements until every party member
+	 * has been seated
+	 * 
+	 * @param Customer customer
+	 */
 	private void seatingHelper(Customer customer)
 	{
 		int seatIndex = 0;
@@ -95,7 +149,6 @@ public class Theater
 			if ( seatChart[seatIndex] == null ) {
 				
 				seatChart[seatIndex] = customer.getName();
-				
 				unSeated--;
 			}
 			
@@ -103,17 +156,17 @@ public class Theater
 		}
 	}
 	
-	/*
-	 * 
-	 * removeCustomer
-	 * 
-	 * accepts a String name, searches 
-	 * the seatChart array for the 
+	/**
+ 	 * removeCustomer accepts a name,
+ 	 * searches the seatChart array for the 
 	 * name, sets every elements of the
-	 *  array equal to the string 
-	 * to null and returns a boolean that 
-	 * represents whether the name was 
-	 * present in the array or not. 
+	 * array equal to the string to null
+	 * and returns a boolean that represents
+	 * whether the name was present in 
+	 * the array or not. 
+	 * 
+	 * @param String name
+	 * @return boolean customerPresent
 	 */
 	public boolean removeCustomer(String name)
 	{
@@ -131,20 +184,24 @@ public class Theater
 		return customerPresent;
 	}
 	
-	/*
-	 * isEmpty
+	/**
+	 * isEmpty returns a boolean to 
+	 * describe whether the theater is 
+	 * empty or not
 	 * 
-	 * returns a boolean to describe whether the 
-	 * theater is empty or not
+	 * @return boolean
 	 */
 	public boolean isEmpty(){
         return (numVacantSeats ==  seatChart.length);
     }
 
-	/*
+	/**
+	 * showSeating creates a String that 
+	 * represents the setChart array in 
+	 * a 'snake' formation, to represent the 
+	 * theater, & returns that String. 
 	 * 
-	 * returns a String representation 
-	 * of the movie theater!
+	 * @return String
 	 */
 	public String showSeating()
 	{
