@@ -1,4 +1,3 @@
-package theaterProject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -13,8 +12,6 @@ public class TheaterTester
 		Theater theater = getTheaterInfo();
 		
 		int menuSelection = makeMenuSelection();
-		
-		
 		
 		while (true){
 			switch (menuSelection) {
@@ -33,6 +30,15 @@ public class TheaterTester
 				case 3: 
 					theater = getTheaterInfo();
 					break;
+					
+				case 4: 
+					getNumTickets(theater);
+					break;
+					
+				case 5: 
+					findYoMan(theater);
+					break;
+					
 			}
 			
 			menuSelection = makeMenuSelection();
@@ -47,7 +53,9 @@ public class TheaterTester
 		System.out.println("0. Input Customer info & seat customer\n"
 						+ "1. Show Seating Chart\n"
 						+ "2. Remove Customers\n"
-						+ "3. make a Theater");
+						+ "3. Make a Theater\n"
+						+ "4. Get the number of Tickets sold!\n"
+						+ "5. Find out if your man is in the theater w some girl\n");
 		int menuSelection = 
 				Integer.parseInt(reader
 					         	.readLine()
@@ -65,10 +73,7 @@ public class TheaterTester
 		int sizeOfParty = Integer.parseInt(reader.readLine().trim());
 		
 		String movie = "movie";
-		
-		
-		System.out.println("They're in!");
-		
+
 		return new Customer(name, movie, sizeOfParty, true);
 
 	}
@@ -130,5 +135,25 @@ public class TheaterTester
 		
 		return new Theater(rows, cols, name);
 	}
-
+	
+	public static void getNumTickets(Theater theater)
+	{
+		System.out.println(theater.getTicketsSold() + " tickets sold "
+				+ " for " + theater.getMovieName());
+	}
+	
+	public static void findYoMan(Theater theater) throws IOException
+	{
+		System.out.println("What's his name?");
+		String name = reader.readLine().trim();
+		
+		if (theater.hasName(name)) 
+		{
+			System.out.println("YEA HES HERE");
+		}
+		else
+		{
+			System.out.println("He isn't here!!" );
+		}
+	}
 }
