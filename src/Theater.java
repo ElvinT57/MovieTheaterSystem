@@ -1,23 +1,37 @@
-/*
- * The Theater class simulates a 
- * movie theater's seating chart. 
- * 
- * Seating chart is functioning, can add
+/**
+ * Purpose: Data Structure and Algorithms Project
+ * Status: Complete and thoroughly tested
+ * Last update: 4/19/19
+ * Submitted:  04/30/19
+ * Comment: test suite and sample run attached
+ *
+ * @author: Christina Bannon, Elvin Torres 
+ * @version: 4.19.2019
  */
 
 
-/*
+/**
  * 
- * Could i use the same thing i use to see if there are 
- * any used names in the theater to remove? can i reuse search method?
+ * <h1> Theater Class </h1>
+ * 
+ * - Simulates a single theater playing a single show. 
+ * - Holds and returns data regarding: 
+ *   1) Seating - whether a party can be 
+ *      accomodated or not, and where they will
+ *      sit. 
+ *   2) Name of movie being played. 
+ *   3) Tickets sold for the show
+ *   4) Whether 
  */
+
+
 public class Theater 
 {
 	private String []    seatChart;
 	private String       movieName;  
 	private int     numVacantSeats;
 	private int 	   ticketsSold;
-	private int cols;
+	private int               cols;
 
 	public Theater (int rows, int cols, String movieName)
 	{
@@ -32,13 +46,7 @@ public class Theater
 	{
 		return movieName;
 	}
-
-	//Perhaps unnecessary
-	public int getNumVacantSeats()
-	{
-		return numVacantSeats;
-	}
-
+	
 	public int getTicketsSold()
 	{
 		return ticketsSold;
@@ -55,12 +63,9 @@ public class Theater
 				presence = true;
 			}
 		}
-		
 		return presence;
 	}
 	
-	
-
 	public boolean assignSeats(Customer customer)
 	{
 		boolean successfulSeating;
@@ -133,7 +138,7 @@ public class Theater
 	 * theater is empty or not
 	 */
 	public boolean isEmpty(){
-        return (numVacantSeats == seatChart.length);
+        return (numVacantSeats ==  seatChart.length);
     }
 
 	/*
