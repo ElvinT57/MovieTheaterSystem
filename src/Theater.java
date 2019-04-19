@@ -5,6 +5,12 @@
  * Seating chart is functioning, can add
  */
 
+
+/*
+ * 
+ * Could i use the same thing i use to see if there are 
+ * any used names in the theater to remove? can i reuse search method?
+ */
 public class Theater 
 {
 	private String []    seatChart;
@@ -37,6 +43,21 @@ public class Theater
 		return ticketsSold;
 	}
 	
+	public boolean hasName(String name)
+	{
+		boolean presence = false;
+		
+		for (int index = 0; index < seatChart.length; index++)
+		{
+			if (name.equals(seatChart[index])) {
+				index = seatChart.length;
+				presence = true;
+			}
+		}
+		
+		return presence;
+	}
+	
 	public boolean assignSeats(Customer customer)
 	{
 		boolean successfulSeating;
@@ -44,10 +65,10 @@ public class Theater
 		if ( customer.getSizeOfParty() < numVacantSeats )
 		{
 			seatingHelper(customer);
+			
 			successfulSeating = true;
 			ticketsSold += customer.getSizeOfParty();
-			
-			System.out.println("FOUND ALLA DEES SEETZ");
+			numVacantSeats -= customer.getSizeOfParty();
 		}
 		else
 		{
@@ -67,23 +88,24 @@ public class Theater
 				
 				seatChart[seatIndex] = customer.getName();
 				
-				seatIndex = ++seatIndex % seatChart.length;
-				
 				unSeated--;
-				numVacantSeats--;
 			}
+			
+			seatIndex = ++seatIndex % seatChart.length;
 		}
 	}
 	
 	/*
 	 * 
-	 * remove is functioning with issues:
-	 * - after removing a bulk of customers, add 
-	 * sometimes returns false depending on where the available
-	 * seats are. I'm thinking I might have to do some refactoring, 
-	 * and maybe use a loop w an increment to keep track of
-	 * if in the entire 2d array there exists x number of seats in a row. 
-	 * It will make for more comparisons, but it will be more correct.
+	 * removeCustomer
+	 * 
+	 * accepts a String name, searches 
+	 * the seatChart array for the 
+	 * name, sets every elements of the
+	 *  array equal to the string 
+	 * to null and returns a boolean that 
+	 * represents whether the name was 
+	 * present in the array or not. 
 	 */
 	public boolean removeCustomer(String name)
 	{
@@ -91,19 +113,21 @@ public class Theater
 		
 		//nested loops to remove a customer
 		for (int index = 0; index < seatChart.length; index++) {
-			if (name.compareTo(seatChart[index]) == 0) {
+			if (name.equals(seatChart[index])) {
 				seatChart[index] = null;
 				numVacantSeats++;
+				customerPresent = true;
 			}
 		}
+		
 		return customerPresent;
 	}
 	
 	/*
-	 * Helper method for removeCustomers... Still thinking on 
-	 * whether we may be better off removing the 'currents'
-	 * and just always finding the next possible spot. 
-	 * I'll do some quick math and update later. 
+	 * isEmpty
+	 * 
+	 * returns a boolean to describe whether the 
+	 * theater is empty or not
 	 */
 	public boolean isEmpty()
 	{
@@ -116,7 +140,11 @@ public class Theater
 		return isEmpty;
 	}
 
-	//slithery lil string
+	/*
+	 * 
+	 * returns a String representation 
+	 * of the movie theater!
+	 */
 	public String showSeating()
 	{
 		StringBuilder string = new StringBuilder();
@@ -125,13 +153,16 @@ public class Theater
 		{
 			for (int col = 0; col < cols; col++)
 			{	
+				
+				//////////////////////////////////////////
+				//put this whole chunk in another method?
 				//if it's an even numbered row, again regular append
 				if (row % 2 == 0) {
 					if (seatChart[ ((cols - 1) * row) + col] == null) {
 						string.append(" (" + row + "," + col + ")");
 					}
 					else {
-						string.append("  ");
+						string.append("   ");
 						string.append(seatChart[((cols - 1 ) * row) + col]);
 						string.append("  ");
 					}
@@ -145,7 +176,7 @@ public class Theater
 						string.append(" (" + row + "," + col + ")");
 					}
 					else {
-						string.append("  ");
+						string.append("   ");
 						string.append(seatChart[((cols - 1) * row)
 							+ ((cols -1 ) - col)]);
 						string.append("  ");
