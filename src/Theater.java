@@ -33,6 +33,7 @@ public class Theater
 		return movieName;
 	}
 
+	//Perhaps unnecessary
 	public int getNumVacantSeats()
 	{
 		return numVacantSeats;
@@ -58,6 +59,8 @@ public class Theater
 		return presence;
 	}
 	
+	
+
 	public boolean assignSeats(Customer customer)
 	{
 		boolean successfulSeating;
@@ -129,16 +132,9 @@ public class Theater
 	 * returns a boolean to describe whether the 
 	 * theater is empty or not
 	 */
-	public boolean isEmpty()
-	{
-		boolean isEmpty = true;
-
-		if (numVacantSeats > 0)
-		{
-			isEmpty = false;
-		}
-		return isEmpty;
-	}
+	public boolean isEmpty(){
+        return (numVacantSeats == seatChart.length);
+    }
 
 	/*
 	 * 
