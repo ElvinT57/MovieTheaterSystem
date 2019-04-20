@@ -6,16 +6,14 @@
  * Comment: test suite and sample run attached
  *
  * @author: Christina Bannon, Elvin Torres
- * @version:
- *
- * <h1>Round Robin Matter Parallel Queue</h1>
+ * @version: <h1>Round Robin Matter Parallel Queue</h1>
  * Representing a list of lines, using an array of Queues.
  * Items will be enqueued and dequeued in a round robin
  * matter.
- *
+ * <p>
  * The first queue in the array will be used for the express
  * line.
- *
+ * <p>
  *  {
  *      {   EXPRESS LINE QUEUE  },
  *      {   REG 1               },
@@ -23,7 +21,6 @@
  *      ...
  *      {   REG n-1             }
  *  }
- *
  */
 public class ParallelQueue<T> implements QueueInterface<T> {
     //Data structure for this ADT
@@ -41,7 +38,7 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         //set current to -1 to indicate it is our first call
         currDQ = -1;
         //set the current enqueue to 1 for the first line
-        currEQ = lastEQ = 0;
+        currEQ = lastEQ = 1;
     }
 
     @Override
@@ -78,7 +75,7 @@ public class ParallelQueue<T> implements QueueInterface<T> {
                     currEQ++;
                 queues[(currEQ++) % queues.length].enqueue(newItem);
             }
-            lastEQ = currEQ-1; //update last enqueue
+            lastEQ = currEQ - 1; //update last enqueue
         }
     }
 
@@ -132,9 +129,10 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         this.currDQ = currDQ;
     }
 
-    public int getLastEQ(){
+    public int getLastEQ() {
         return lastEQ;
     }
+
     /**
      * Returns the size of the queue at the given
      * index.
@@ -162,8 +160,9 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         }
         //enqueue to the smallest queue
         queues[smallest].enqueue(newItem);
-        //update last enqueue
+        //update last enqueue and currentEQ
         lastEQ = smallest;
+        currEQ = smallest+1;
     }
 
     /**
@@ -190,14 +189,14 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         boolean found = false;
         for (int i = 0; i < queues.length; i++) {
             for (int j = 0; j < queues[i].numItems; j++) {
-                Customer c = (Customer)queues[i].dequeue();
-                if(c.getName().equals(name))
+                Customer c = (Customer) queues[i].dequeue();
+                if (c.getName().equals(name))
                     found = true;
                 //enqueue it back, to get the original sequence
-                queues[i].enqueue((T)c);
+                queues[i].enqueue((T) c);
             }
             //if found, break the condition
-            if(found)
+            if (found)
                 i = queues.length;
         }
         return found;
