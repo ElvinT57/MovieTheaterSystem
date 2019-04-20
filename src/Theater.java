@@ -2,12 +2,12 @@
 /**
  * Purpose: Data Structure and Algorithms Project
  * Status: Complete and thoroughly tested
- * Last update: 4/19/19
+ * Last update: 4/20/19
  * Submitted:  04/30/19
  * Comment: test suite and sample run attached
  *
  * @author: Christina Bannon, Elvin Torres 
- * @version: 4.19.2019
+ * @version: 4.20.2019
  */
 
 /**
@@ -122,7 +122,6 @@ public class Theater
 			
 			successfulSeating = true;
 			ticketsSold += customer.getSizeOfParty();
-			numVacantSeats -=customer.getSizeOfParty();
 		} 
 		else 
 		{
@@ -150,6 +149,7 @@ public class Theater
 				
 				seatChart[seatIndex] = customer.getName();
 				unSeated--;
+				numVacantSeats--;
 			}
 			
 			seatIndex = ++seatIndex % seatChart.length;
@@ -214,32 +214,34 @@ public class Theater
 			{	
 				
 				//////////////////////////////////////////
-				//put this whole chunk in another method?
-				//if it's an even numbered row, again regular append
+				// put this whole chunk in another method?
+				// if it's an even numbered row, again regular append
 				if (row % 2 == 0) {
-					if (seatChart[ ((cols - 1) * row) + col] == null) {
+					if (seatChart[ (cols * row) + col] == null) {
 						string.append(" (" + row + "," + col + ")");
 					}
 					else {
 						string.append("   ");
-						string.append(seatChart[((cols - 1 ) * row) + col]);
+						string.append(seatChart[(cols * row) + col]);
 						string.append("  ");
 					}
 				}
 				
-				//if it's an odd numbered row, list them the other way!
-				else {
-					if (seatChart[ ((cols - 1) * row) 
-					              + ((cols - 1) - col)] == null) 
+				// if it's an odd numbered row,
+				// list them the other way!
+				else 
+				{
+					if (seatChart[ (cols * row) 
+					              + (cols - 1 -col)] == null) 
 					{
 						string.append(" (" + row + "," + col + ")");
 					}
-					else {
+					else 
+					{
 						string.append("   ");
-						string.append(seatChart[((cols - 1) * row)
-							+ ((cols -1 ) - col)]);
+						string.append(seatChart[(cols* row)
+							+ (cols - 1 - col)]);
 						string.append("  ");
-						
 					}
 				}
 			}	
