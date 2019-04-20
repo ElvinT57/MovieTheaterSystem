@@ -1,3 +1,5 @@
+
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -93,11 +95,12 @@ public class Driver {
                     System.out.println(movies[0]);
                     break;
                 case "7":
-                    System.out.println(" tickets have been sold for the Shazam! Movie.");
-                    System.out.println(" tickets have been sold for the Dumbo Movie.");
+                    System.out.println(movies[1].getTicketsSold() + " tickets have been sold for the Shazam! Movie.");
+                    System.out.println(movies[1].getTicketsSold() + " tickets have been sold for the Dumbo Movie.");
                     System.out.println("Total Earning: " + ((movies[0].getTicketsSold() + movies[1].getTicketsSold()) * PRICE_OF_TICKET));
                     break;
             }
+            System.out.println();
         }
     }
 
@@ -105,12 +108,13 @@ public class Driver {
 
     /**
      * Prompts for customer information (Name, partySize, movieName, underAge).
-     * After, it checks if the customer is in the either movie theater.
+     * After, it checks if the customer is in the either movie theater. Prompts
+     * repeatably until they enter a name that is not in the movie theater.
      * If the customer was not found, then they will added to the appropriate
      * line.
      *
-     * @param input input string builder
-     * @param lines ParallelQueue that represents lines
+     * @param input  input string builder
+     * @param lines  ParallelQueue that represents lines
      * @param movies array of movies
      * @throws IOException
      */
@@ -119,10 +123,19 @@ public class Driver {
         String name, movieName;
         int partySize = 0;
         boolean underAge;
+        boolean isInMovies = true;
 
-        //prompt for info for new Customer
-        System.out.print(">>Enter customer name: ");
-        name = getInput(input);
+        do {
+            //prompt for info for new Customer
+            System.out.print(">>Enter customer name: ");
+            name = getInput(input);
+            //check if the name is in one of the theater
+            if ((movies[0].hasName(name) || movies[1].hasName(name)) || lines.contains(name)) {
+                System.out.println("Customer " + name + " is already in the theater!");
+                System.out.println("Please specify a different name");
+            } else
+                isInMovies = false;
+        } while (isInMovies);
 
         System.out.print(">>Enter party size: ");
         partySize = Integer.parseInt(getInput(input));
@@ -132,25 +145,34 @@ public class Driver {
 
         System.out.print(">>Is a child 11 or younger in this party(Y/N)? ");
         underAge = (getInput(input).equalsIgnoreCase("Y")) ? true : false;
-//        //check if the name is in one of the theater
-//        if(!movies[0].hasName("") && !movies[1].hasName("")){
-//
-//        }else
-//            System.out.println("Is alread");
-
+        //enqueue the customer into the appropriate line
         lines.enqueue(new Customer(name, movieName, partySize, underAge));
+        //display enqueue
+        switch (lines.getLastEQ()) {
+            case 0:
+                System.out.println("Customer " + name + " is in express line.");
+                break;
+            case 1:
+                System.out.println("Customer " + name + " is in first line.");
+            break;
+            case 2:
+                System.out.println("Customer " + name + " is in second line.");
+                break;
+        }
+
+
     }
 
     /**
      * Retrieve the next customer from the lines and
      * assign their seats if there are enough seats.
      *
-     * @param input input string builder
-     * @param lines ParallelQueue that represents lines
+     * @param input  input string builder
+     * @param lines  ParallelQueue that represents lines
      * @param movies array of movies
-     *
      * @throws IOException
      */
+
     private static void option2(StringBuilder input, ParallelQueue lines, Theater[] movies) throws IOException {
         if (lines.getCurrentDQ() == -1) {
             //decide what line to serve first
@@ -158,38 +180,45 @@ public class Driver {
             //retrieve index from option
             lines.setCurrentDQ((getInput(input).charAt(0) == 'E') ? 0 : Character.getNumericValue(input.toString().charAt(input.length() - 1)));
         }
-        //Inquiry next customer using the lastLine index
-        Customer customer = (Customer) lines.dequeue();
+        if (!lines.isEmpty()) {
+            //Inquiry next customer using the lastLine index
+            Customer customer = (Customer) lines.dequeue();
 
-        //assign seats
-        if (customer.getMovieName().equals("Dumbo")) {
-            //CONTINUE
-        } else {
-            //CONTINUE
-        }
+            System.out.println("Serving customer " + customer.getName());
+            //assign seats
+            if (customer.getMovieName().equals("Dumbo"))
+                assignMovie1(input, movies, customer, true);
+            else
+                assignMovie2(input, movies, customer, true);
+        } else
+            System.out.println("There are no customers waiting in any line.");
     }
 
     /**
      * Prompts for a customer to leave Movie Theater.
-     *
+     * <p>
      * If the customer is found in either movie theaters,
      * they will be removed from the seating chart.
      *
-     * @param input input string builder
+     * @param input  input string builder
      * @param movies array of movies
      * @throws IOException
      */
+
     private static void option3(StringBuilder input, Theater[] movies) throws IOException {
-        System.out.print(">>Enter customer name to leave Movie Theater: ");
-        String name = getInput(input);
-        if (movies[0].isEmpty() && movies[1].isEmpty())
+        if (!movies[0].isEmpty() && !movies[1].isEmpty()) {
+            System.out.print(">>Enter customer name to leave Movie Theater: ");
+            String name = getInput(input);
+            if (movies[0].isEmpty() && movies[1].isEmpty())
+                System.out.println("No customers are in the movie theater at this time.");
+            else {
+                if (movies[0].removeCustomer(name) || movies[1].removeCustomer(name))
+                    System.out.println("Customer " + name + " has left the Movie Theater.");
+                else
+                    System.out.println("This customer is not in Movie Theater.");
+            }
+        } else
             System.out.println("No customers are in the movie theater at this time.");
-        else {
-            if (movies[0].removeCustomer(name) || movies[1].removeCustomer(name)) {
-                System.out.println("Customer " + name + " has left the Movie Theater.");
-            } else
-                System.out.println("This customer is not in Movie Theater.");
-        }
     }
 
     /**
@@ -230,6 +259,7 @@ public class Driver {
     }
 
     //============== HELPER METHODS ==============
+
     private static String getInput(StringBuilder input) throws IOException {
         input.replace(0, input.length(), std.readLine());
         System.out.println(input.toString()); //echo
@@ -247,4 +277,41 @@ public class Driver {
         System.out.println(str.replace(". ", ".\n"));
     }
 
+    private static void assignMovie1(StringBuilder input, Theater[] movies, Customer customer, boolean firstTime) throws IOException {
+        if (movies[0].assignSeats(customer)) {
+            //the customer has been seated successfully
+            System.out.println(customer.getName() + ", party of " + customer.getSizeOfParty() + " has been seated in the Dumbo Movie Theater");
+        } else {
+            if (firstTime) {
+                System.out.println("Sorry. This movie is sold out.");
+                System.out.print("Would you like to see the other movie(Y/N)?");
+                if (getInput(input).equalsIgnoreCase("Y"))
+                    assignMovie2(input, movies, customer, false);
+                else
+                    System.out.println("Customer " + customer.getName() + " has left the Movie Theater.");
+            } else {
+                System.out.println("Sorry. Both movies are sold out. Good bye!");
+                System.out.println("Customer " + customer.getName() + " has left the Movie Theater.");
+            }
+        }
+    }
+
+    private static void assignMovie2(StringBuilder input, Theater[] movies, Customer customer, boolean firstTime) throws IOException {
+        if (movies[1].assignSeats(customer)) {
+            //the customer has been seated successfully
+            System.out.println(customer.getName() + ", party of " + customer.getSizeOfParty() + " has been seated in the Shazam! Movie Theater");
+        } else {
+            if (firstTime) {
+                System.out.println("Sorry. This movie is sold out.");
+                System.out.print("Would you like to see the other movie(Y/N)?");
+                if (getInput(input).equalsIgnoreCase("Y"))
+                    assignMovie2(input, movies, customer, false);
+                else
+                    System.out.println("Customer " + customer.getName() + " has left the Movie Theater.");
+            } else {
+                System.out.println("Sorry. Both movies are sold out. Good bye!");
+                System.out.println("Customer " + customer.getName() + " has left the Movie Theater.");
+            }
+        }
+    }
 }
