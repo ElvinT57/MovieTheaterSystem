@@ -117,16 +117,15 @@ public class Theater
 		return presence;
 	}
 	
-	/**
+
+       /**
 	 * assignSeats accepts a customer, 
-	 * and if there are seats available for 
-	 * the individuals in the customer's 
-	 * party, 'seats' the customers by 
-     * copying their party name into available
+	 * and 'seats' the customers by 
+         * copying their party name into available
 	 * seat elements until every party member
 	 * has been seated
 	 * 
-	 * 
+	 * @precondition: validation of available number of seats
 	 */
 	public void assignSeats(Customer customer)
 	{
@@ -150,16 +149,6 @@ public class Theater
 				seatIndex = ++seatIndex % 
 						seatChart.length;
 			}
-
-	}
-	
-	/**
-
-	 * 
-	 * @param Customer customer
-	 */
-	private void seatingHelper(Customer customer)
-	{
 
 	}
 	
