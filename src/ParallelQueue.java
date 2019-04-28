@@ -6,10 +6,21 @@
  * Comment: test suite and sample run attached
  *
  * @author: Christina Bannon, Elvin Torres
- * @version: <h1>Round Robin Matter Parallel Queue</h1>
+ * @version:
+ *
+ * <h1>Round Robin Matter Parallel Queue</h1>
  * Representing a list of lines, using an array of Queues.
  * Items will be enqueued and dequeued in a round robin
- * matter.
+ * manner.
+ *
+ * <h1>Functionality of Parallel Queue</h1>
+ * <ul>
+ *     <li>Keeps track of the last item that was enqueued.</li>
+ *     <li>Keeps track of the next queue that will be enqueued and dequeued.</li>
+ *     <li>Finds the smallest line for priority items.</li>
+ *     <li>Enqueues and dequeues items in Round Robin manner</li>
+ * </ul>
+ * 
  * <p>
  * The first queue in the array will be used for the express
  * line.
@@ -150,7 +161,6 @@ public class ParallelQueue<T> implements QueueInterface<T> {
      * @param newItem new item to be added into the priority queue.
      */
     private void prioritize(T newItem) {
-        System.out.println("PRIORITY");
         //check for the smallest line compared to the express line
         int smallest = 0;   //assume the express is the smallest
         for (int i = 1; i < queues.length; i++) {
