@@ -20,7 +20,7 @@
  *     <li>Finds the smallest line for priority items.</li>
  *     <li>Enqueues and dequeues items in Round Robin manner</li>
  * </ul>
- * 
+ *
  * <p>
  * The first queue in the array will be used for the express
  * line.
