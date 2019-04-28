@@ -1,3 +1,5 @@
+package theaterProject;
+
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -195,7 +197,7 @@ public class Driver {
      */
     private static void 
     option1(StringBuilder input, 
-    		ParallelQueue lines, 
+    		ParallelQueue<Customer> lines, 
     		Theater[] movies) throws IOException 
     {
         //Local variables
@@ -215,10 +217,10 @@ public class Driver {
             		|| lines.contains(name)) {
                 System.out.println("Customer " 
             		+ name + " is already in the "
-            				+ "theater!");
+            		+ "theater!");
                 System.out.println("Please"
-                		+ " specify a different "
-                		+ "name");
+                	+ " specify a different "
+                	+ "name");
             } else
                 isInMovies = false;
         } while (isInMovies);
@@ -273,7 +275,7 @@ public class Driver {
 
     private static void 
     option2(StringBuilder input, 
-    		ParallelQueue lines, Theater[] movies)
+    		ParallelQueue<Customer> lines, Theater[] movies)
     				throws IOException 
     {
         if (lines.getCurrentDQ() == -1) {
@@ -295,7 +297,7 @@ public class Driver {
             //Inquiry next customer
         	// using the lastLine index
             Customer customer 
-            = (Customer) lines.dequeue();
+            	= lines.dequeue();
 
             System.out.println("Serving customer "
             + customer.getName());
@@ -331,7 +333,7 @@ public class Driver {
     		Theater[] movies) throws IOException
     {
         if (!movies[0].isEmpty() 
-        		&& !movies[1].isEmpty()) {
+        		|| !movies[1].isEmpty()) {
             System.out.print(">>Enter customer "
             		+ "name to leave Movie "
             		+ "Theater: ");
@@ -367,7 +369,7 @@ public class Driver {
      * represents lines
      */
     public static void 
-    option4(ParallelQueue lines) {
+    option4(ParallelQueue<Customer> lines) {
         //display first line
         if (lines.getSizeOf(1) != 0) {
             if (lines.getSizeOf(1) > 1)
@@ -423,12 +425,13 @@ public class Driver {
 
     private static String 
     getInput(StringBuilder input) 
-    		throws IOException {
+    		throws IOException 
+    {
         input.replace(0, 
-        		input.length(), 
-        		std.readLine());
+        		     input.length(), 
+        		     std.readLine());
         System.out.println(input.toString());
-        return input.toString();    
+        return input.toString().trim();    
       // return the toString just in case we 
       // need to chain call
     }
@@ -442,7 +445,7 @@ public class Driver {
      * represents lines
      */
     private static void 
-    displayLineInfo(QueueRA line) {
+    displayLineInfo(QueueRA<Customer> line) {
         String str = line.toString();
         System.out.println(
         		str.replace(". ", ".\n"));
