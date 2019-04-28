@@ -77,6 +77,17 @@ public class Theater
 		return ticketsSold;
 	}
 	
+    /**
+     * Checks if there is enough seats for the
+     * given size of party.
+     *
+     * @param partySize size of the party
+     * @return t/f whether this theater has enough seats.
+     */
+    public boolean hasEnoughSeats(int partySize){
+        return (numVacantSeats >= partySize);
+    }
+	
 	/**
 	 * accepts a String name, 
 	 * checks the seatChart array
@@ -115,7 +126,7 @@ public class Theater
 	{
 		boolean successfulSeating;
 		
-		if ( customer.getSizeOfParty() < numVacantSeats )
+		if ( hasEnoughSeats(customer.getSizeOfParty()) )
 		{
 			seatingHelper(customer);
 			
@@ -126,7 +137,6 @@ public class Theater
 		{
 			successfulSeating = false;
 		}
-		
 		return successfulSeating;	
 	}
 	
