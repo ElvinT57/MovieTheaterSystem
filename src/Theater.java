@@ -8,9 +8,7 @@
  *
  * <p>@author: Christina Bannon, Elvin Torres </p>
  * <p>@version: 4.20.2019</p>
- */
-
-/**
+ * 
  * 
  * <h1> Theater </h1>
  * 
@@ -20,12 +18,12 @@
  * <li>Holds manipulates & returns 
  *   data regarding: 
  *   <ol>
- *   <li>1) Seating - whether a party 
+ *   <li> Seating - whether a party 
  *      can be seated or not, and 
  *      where they will sit. </li>
- *   <li>2) Name of movie being played. </li>
- *   <li>3) Tickets sold for the show</li>
- *   <li>4) Whether a customer of the 
+ *   <li> Name of movie being played. </li>
+ *   <li> Tickets sold for the show</li>
+ *   <li> Whether a customer of the 
  *      same name is already seated 
  *      in the Theater or not</li>
  *      </li>
@@ -107,6 +105,7 @@ public class Theater
 	{
 		boolean presence = false;
 		
+		name = name.trim();
 		for (int index = 0; index < seatChart.length; index++)
 		{
 			if (name.equals(seatChart[index])) {
@@ -244,4 +243,3 @@ public class Theater
 		return string.toString();
 	}
 }
-
