@@ -13,18 +13,23 @@
  * 
  * <h1> Theater </h1>
  * 
- * - Simulates a single theater 
- *   playing a single show. 
- * - Holds manipulates & returns 
+ * <ul>
+ * <li>Simulates a single theater 
+ *   playing a single show. </li>
+ * <li>Holds manipulates & returns 
  *   data regarding: 
- *   1) Seating - whether a party 
+ *   <ol>
+ *   <li>1) Seating - whether a party 
  *      can be seated or not, and 
- *      where they will sit. 
- *   2) Name of movie being played. 
- *   3) Tickets sold for the show
- *   4) Whether a customer of the 
+ *      where they will sit. </li>
+ *   <li>2) Name of movie being played. </li>
+ *   <li>3) Tickets sold for the show</li>
+ *   <li>4) Whether a customer of the 
  *      same name is already seated 
- *      in the Theater or not
+ *      in the Theater or not</li>
+ *      </li>
+ *   </ol>
+ *  </ul>
  */
 
 public class Theater 
