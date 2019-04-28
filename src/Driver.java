@@ -7,12 +7,12 @@ import java.io.InputStreamReader;
 /**
  * Purpose: Data Structure and Algorithms Project
  * Status: Complete and thoroughly tested
- * Last update:
+ * Last update: 4/28/19
  * Submitted:  04/30/19
  * Comment: test suite and sample run attached
  *
- * @author: Christina Bannon, Elvin Torres
- * @version:
+ * <p>@author: Christina Bannon, Elvin Torres</p>
+ * <p>@version: 4.28.19</p>
  */
 public class Driver {
     static BufferedReader std = new BufferedReader(new InputStreamReader(System.in));
@@ -225,7 +225,7 @@ public class Driver {
      *
      * @param lines ParallelQueue that represents lines
      */
-    public static void option4(ParallelQueue lines) {
+    private static void option4(ParallelQueue lines) {
         //display first line
         if (lines.getSizeOf(1) != 0) {
             if (lines.getSizeOf(1) > 1)
