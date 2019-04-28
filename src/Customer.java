@@ -12,9 +12,17 @@ public class Customer {
     //Data fields for this class
     private String name;
     private String movieName;
-    private int sizeOfParty;
+    private int partySize;
     private boolean underAge;
 
+    public Customer (String name, String movieName,
+    		int partySize, boolean underAge)
+    {
+    	this.name = name;
+    	this.movieName = movieName;
+    	this.partySize = partySize;
+    	this.underAge = underAge;
+    }
     public String getName() {
         return name;
     }
@@ -24,7 +32,7 @@ public class Customer {
     }
 
     public int getSizeOfParty() {
-        return sizeOfParty;
+        return partySize;
     }
 
     public boolean isUnderAge() {
@@ -33,6 +41,6 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer " + name + " part of " + sizeOfParty + " for " + movieName + " movie.";
+        return "Customer " + name + " part of " + partySize + " for " + movieName + " movie.";
     }
 }
