@@ -106,7 +106,8 @@ public class Theater
 		boolean presence = false;
 		
 		name = name.trim();
-		for (int index = 0; index < seatChart.length; index++)
+		for (int index = 0; index 
+				< seatChart.length; index++)
 		{
 			if (name.equals(seatChart[index])) {
 				index = seatChart.length;
@@ -121,53 +122,45 @@ public class Theater
 	 * and if there are seats available for 
 	 * the individuals in the customer's 
 	 * party, 'seats' the customers by 
-	 * passing the customer object to the 
-	 * seatingHelper
+     * copying their party name into available
+	 * seat elements until every party member
+	 * has been seated
 	 * 
-	 * @return boolean - success or failure 
-	 *    of the seating attempt
+	 * 
 	 */
-	public boolean assignSeats(Customer customer)
+	public void assignSeats(Customer customer)
 	{
-		boolean successfulSeating;
-		
-		if ( hasEnoughSeats(customer.getSizeOfParty()) )
-		{
 			seatingHelper(customer);
 			
-			successfulSeating = true;
-			ticketsSold += customer.getSizeOfParty();
-		} 
-		else 
-		{
-			successfulSeating = false;
-		}
-		return successfulSeating;	
+			ticketsSold += 
+					customer.getSizeOfParty();
+			
+			int seatIndex = 0;
+			int unSeated = customer.getSizeOfParty();
+			
+			while ( unSeated > 0 ) {
+				if ( seatChart[seatIndex] == null ) {
+					
+					seatChart[seatIndex] = 
+							customer.getName();
+					unSeated--;
+					numVacantSeats--;
+				}
+				
+				seatIndex = ++seatIndex % 
+						seatChart.length;
+			}
+
 	}
 	
 	/**
-	 * seatingHelper accepts a customer, 
-	 * and copies their name into available
-	 * seat elements until every party member
-	 * has been seated
+
 	 * 
 	 * @param Customer customer
 	 */
 	private void seatingHelper(Customer customer)
 	{
-		int seatIndex = 0;
-		int unSeated = customer.getSizeOfParty();
-		
-		while ( unSeated > 0 ) {
-			if ( seatChart[seatIndex] == null ) {
-				
-				seatChart[seatIndex] = customer.getName();
-				unSeated--;
-				numVacantSeats--;
-			}
-			
-			seatIndex = ++seatIndex % seatChart.length;
-		}
+
 	}
 	
 	/**
@@ -187,7 +180,8 @@ public class Theater
 		boolean customerPresent = false;
 		
 		//nested loops to remove a customer
-		for (int index = 0; index < seatChart.length; index++) {
+		for (int index = 0; 
+				index < seatChart.length; index++) {
 			if (name.equals(seatChart[index])) {
 				seatChart[index] = null;
 				numVacantSeats++;
@@ -206,7 +200,8 @@ public class Theater
 	 * @return boolean
 	 */
 	public boolean isEmpty(){
-        return (numVacantSeats ==  seatChart.length);
+        return (numVacantSeats 
+        		== seatChart.length);
     }
 
 	/**
@@ -219,22 +214,31 @@ public class Theater
 	@Override
 	public String toString()
 	{
-		StringBuilder string = new StringBuilder();
+		StringBuilder string = 
+				new StringBuilder();
 		
-		for (int row = 0; row < (seatChart.length / cols); row++)
+		for (int row = 0; 
+				row < (seatChart.length / cols); 
+					row++)
 		{
 			for (int col = 0; col < cols; col++)
 			{	
 				if (seatChart[ (cols * row) + col] == null) {
-					string.append("Row " + (row + 1) + 
-								" seat " + (col + 1) + 
+					string.append("Row " 
+							+ (row + 1) + 
+								" seat " 
+							+ (col + 1) + 
 								" is free.");
 				}
 				else {
-					string.append("Row " + (row + 1) + 
-							    " seat " + (col + 1) + 
+					string.append("Row " 
+							+ (row + 1) + 
+							    " seat " 
+							+ (col + 1) + 
 							    " is used by ");
-					string.append(seatChart[(cols * row) + col] + 
+					string.append(
+						seatChart[ (cols * row)
+						           + col] + 
 								"'s party. ");
 				}			
 				string.append("\n");
