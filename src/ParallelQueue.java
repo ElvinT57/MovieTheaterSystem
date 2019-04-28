@@ -1,12 +1,14 @@
 /**
+ *
  * Purpose: Data Structure and Algorithms Project
  * Status: Complete and thoroughly tested
  * Last update:
  * Submitted:  04/30/19
  * Comment: test suite and sample run attached
  *
- * @author: Christina Bannon, Elvin Torres
- * @version:
+ *
+ * <p>@author: Christina Bannon, Elvin Torres</p>
+ * <p>@version: 4.30.19</p>
  *
  * <h1>Round Robin Matter Parallel Queue</h1>
  * Representing a list of lines, using an array of Queues.
@@ -25,13 +27,15 @@
  * The first queue in the array will be used for the express
  * line.
  * <p>
- *  {
- *      {   EXPRESS LINE QUEUE  },
- *      {   REG 1               },
- *      {   REG 2               },
- *      ...
- *      {   REG n-1             }
+ * <code>
+ *  {</br>
+ *      {   EXPRESS LINE QUEUE  },</br>
+ *      {   REG 1               },</br>
+ *      {   REG 2               },</br>
+ *      ...</br>
+ *      {   REG n-1             }</br>
  *  }
+ * </code>
  */
 public class ParallelQueue<T> implements QueueInterface<T> {
     //Data structure for this ADT
@@ -164,9 +168,8 @@ public class ParallelQueue<T> implements QueueInterface<T> {
         //check for the smallest line compared to the express line
         int smallest = 0;   //assume the express is the smallest
         for (int i = 1; i < queues.length; i++) {
-            if (queues[smallest].numItems > queues[i].numItems) {
+            if (queues[smallest].numItems > queues[i].numItems)
                 smallest = i;   //new smallest line found!
-            }
         }
         //enqueue to the smallest queue
         queues[smallest].enqueue(newItem);
