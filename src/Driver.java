@@ -1,5 +1,3 @@
-package theaterProject;
-
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -304,11 +302,11 @@ public class Driver {
             //assign seats
             if (customer.getMovieName()
             		.equals("Dumbo"))
-                assignMovie0(input,
-                		movies, customer, true);
+                assignMovie(input,
+                		movies, customer, 0);
             else
-                assignMovie1(input, 
-                		movies, customer, true);
+                assignMovie(input, 
+                		movies, customer, 1);
         } else
             System.out.println("There"
             		+ " are no customers"
@@ -464,6 +462,7 @@ public class Driver {
      * @param firstTime
      * @throws IOException
      */
+    /*
     private static void 
     assignMovie0(StringBuilder input, 
     		Theater[] movies, 
@@ -539,10 +538,11 @@ public class Driver {
         }
     }
 
+*/
     /**
      * This method checks if the party 
-     * can be seated in the Shazam! movie 
-     * (movie #2). If they cannot be
+     * can be seated in their indicated movie
+     * of choice. If they cannot be
      * seated, they are prompt to be seated 
      * in the other movie.
      *
@@ -551,62 +551,70 @@ public class Driver {
      * @param customer
      * @param firstTime
      * @throws IOException
-     */
+     */    
     private static void 
-    assignMovie1(StringBuilder input, 
-    		Theater[] movies, Customer customer, 
-    		boolean firstTime) 
+    assignMovie(StringBuilder input, 
+    		Theater[] movies, Customer customer,
+    		int theaterIndex) 
     				throws IOException {
     	
     	// if the customer has been seated
     	// successfully
-        if (movies[1].assignSeats(customer)) {
-           
+        if (movies[theaterIndex]
+        		.hasEnoughSeats(customer
+        				.getSizeOfParty())) 
+        {
+        	movies[theaterIndex].assignSeats(customer);
             System.out.println(customer.getName() 
             		+ ", party of " 
             		+ customer.getSizeOfParty() 
             		+ " has been seated in the "
-            		+ "Shazam! Movie Theater");
-        } else {
-            if (movies[0]
+            		+ movies[theaterIndex]
+            				.getMovieName() + 
+            		" Movie Theater");
+        } 
+        else 
+        {
+        	// change theaterIndex to reflect other theater
+        	theaterIndex = ++theaterIndex % 2;
+
+        	//Check availability of the other movie
+            if (movies[theaterIndex]
             		.hasEnoughSeats(customer
-            				.getSizeOfParty())) {
-                if (firstTime) {
+            				.getSizeOfParty()))
+            {
                     System.out.println("Sorry. "
                     		+ "This movie is sold "
                     		+ "out.");
                     System.out.print("Would you "
                     		+ "like to see the "
                     		+ "other movie(Y/N)?");
-                    if (getInput(input)
-                    	.equalsIgnoreCase("Y")) {
-                        assignMovie0(input, movies,
-                        		customer, false);
-                    }else {
+                    
+                    switch (getInput(input).charAt(0))
+                    {
+                    case 'y': 
+                    case 'Y': 
+                    	assignMovie(input, movies, customer, theaterIndex);
+                    	break;
+                    default: 
                         System.out.println(
                         		"Customer " 
                         + customer.getName() +
                         " has left the Movie "
                         + "Theater.");
+                        break;
                     }
-                } else {
-                    System.out.println("Sorry. "
-                    		+ "Both movies are "
-                    		+ "sold out. "
-                    		+ "Good bye!");
-                    System.out.println("Customer "
-                    		+ customer.getName() 
-                    		+ " has left the "
-                    		+ "Movie Theater.");
-                }
-            } else {
+            }
+            else
+            {
                 System.out.println("Sorry. "
                 		+ "Both movies are "
-                		+ "sold out. Good bye!");
-                System.out.println("Customer " 
-                		+ customer.getName() + 
-                		" has left the Movie "
-                		+ "Theater.");
+                		+ "sold out. "
+                		+ "Good bye!");
+                System.out.println("Customer "
+                		+ customer.getName() 
+                		+ " has left the "
+                		+ "Movie Theater.");
             }
         }
     }
