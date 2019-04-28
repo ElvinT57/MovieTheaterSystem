@@ -1,3 +1,4 @@
+
 /**
  * Purpose: Data Structure and Algorithms Project
  * Status: Complete and thoroughly tested
@@ -5,8 +6,8 @@
  * Submitted:  04/30/19
  * Comment: test suite and sample run attached
  *
- * @author: Christina Bannon, Elvin Torres 
- * @version: 4.20.2019
+ * <p>@author: Christina Bannon, Elvin Torres </p>
+ * <p>@version: 4.20.2019</p>
  */
 
 /**
