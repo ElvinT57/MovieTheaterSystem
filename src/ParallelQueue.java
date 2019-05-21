@@ -10,7 +10,7 @@
  * <p>@author: Christina Bannon, Elvin Torres</p>
  * <p>@version: 4.28.19</p>
  *
- * <h1>Round Robin Matter Parallel Queue</h1>
+ * <h1>Round Robin Manner Parallel Queue</h1>
  * Representing a list of lines, using an array of Queues.
  * Items will be enqueued and dequeued in a round robin
  * manner.
